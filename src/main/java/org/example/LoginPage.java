@@ -15,7 +15,7 @@ import java.util.List;
 public class LoginPage {
 
 
-   , WebDriver driver = null;
+   WebDriver driver = null;
     String expectedErrorMessage = "Incorrect format Enter a valid 5-digit US ZIP Code.";
 
     
