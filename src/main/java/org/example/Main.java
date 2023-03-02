@@ -6,6 +6,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 
@@ -53,15 +54,23 @@ public class Main {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();// Gecko Driver, IE iedriver, safari driver
         driver.get("https://www.statefarm.com");
-        driver.findElement(By.id("quote-main-zip-code-input")).sendKeys("00098", Keys.ENTER);
+        driver.findElement(By.cssSelector("#quote-main-zip-code-input")).sendKeys("00098", Keys.ENTER);
         Thread.sleep(2000);
         String errorMessage = driver.findElement(By.cssSelector("#quote-error-alert")).getText();
         System.out.println(errorMessage);
         Assert.assertEquals(errorMessage, expectedZipCodeErrorMessage);
-
     }
 
-    @AfterTest
+    @Test
+    public void getFileClaim() throws InterruptedException {
+        //a[normalize-space()='File a claim']
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();// Gecko Driver, IE iedriver, safari driver
+        driver.get("https://www.statefarm.com");
+        driver.findElement(By.xpath("//a[normalize-space()='File a claim']"));
+        Thread.sleep(3000);
+    }
+    @AfterMethod
     public void tearDown() {
         driver.quit(); // driver.close();
     }

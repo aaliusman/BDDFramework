@@ -8,6 +8,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 
@@ -42,7 +43,7 @@ public class LoginPage {
     }
 
 
-    @Test
+    @Test(priority = -1)
     public void validateLoginPage() throws InterruptedException, IOException {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
@@ -63,16 +64,27 @@ public class LoginPage {
         int lengthOfZipCode = driver.findElement(By.xpath("//*[@id='quote-main-zip-code-input']")).getAttribute("value").length();
 //        Assert.assertEquals(lengthOfZipCode, 5);
         Thread.sleep(2000);
+
+        driver.findElement(By.cssSelector("button[class='-oneX-header-top-menu-btn'] span")).click();
+        String password = prop.getProperty("password");
+        System.out.println(password);
+        driver.findElement(By.cssSelector("#util-login-password")).sendKeys(password);
+        Thread.sleep(4000);
     }
 
     @Test
-    public void testDropdown() {
+    public void testDropdown() throws InterruptedException {
         List<String> expectedDropDown = new ArrayList<>(Arrays.asList("Select", "Option1", "Option2", "Option3"));
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         driver.get("https://rahulshettyacademy.com/AutomationPractice/");
         Select select = new Select(driver.findElement(By.id("dropdown-class-example")));
+        Thread.sleep(3000);
+        select.selectByIndex(3);
+        Thread.sleep(2000);
         select.selectByVisibleText("Option2");
+        Thread.sleep(2000);
+        select.selectByValue("option1");
         List<WebElement> e = select.getOptions();
         for (int i = 0; i<e.size();i++){
             Assert.assertEquals(e.get(i).getText(), expectedDropDown.get(i));
@@ -83,18 +95,26 @@ public class LoginPage {
 //        }
     }
 
-    @Test
+    @Test(priority = 1)
     public void alertExample() throws InterruptedException {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         driver.get("https://rahulshettyacademy.com/AutomationPractice/");
         driver.findElement(By.id("alertbtn")).click();
         driver.switchTo().alert().accept();
-        Thread.sleep(3000);
+        Thread.sleep(500);
+        driver.findElement(By.cssSelector("#confirmbtn")).click();
+        driver.switchTo().alert().dismiss();
+        Thread.sleep(300);
+        driver.findElement(By.cssSelector("#confirmbtn")).click();
+        String getAlertText = driver.switchTo().alert().getTex
+        String expectedAlertText = "Hello , Are you sure you want to confirm";
+        Assert.assertEquals(getAlertText, expectedAlertText);
+
 
     }
 
-    @Test
+    @Test(priority = 2)
     public void switchTab() throws InterruptedException {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
@@ -117,7 +137,7 @@ public class LoginPage {
         }
     }
 
-    @Test
+    @Test(priority = 4)
     public void howToHandleWebTable() {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
@@ -126,8 +146,18 @@ public class LoginPage {
         int columCount = columNumber.size();
         System.out.println("No of rows in this table : " + columCount);
 
-        List<WebElement> rowsNumber = driver.findElements(By.xpath("//table[@class='table-display']/tbody/tr"));
+        List<WebElement> rowsNumber = driver.findElements(By.xpath("//table[@class='table-display']/tbody/tr/td"));
         int rowCount = rowsNumber.size();
+
+        for (int i = 0;i<columCount;i++) {
+            System.out.println("Colum Name: " + columNumber.get(i).getText());
+        }
+            for (int x = 0; x<rowCount; x++) {
+                System.out.println("Rows value: "+ rowsNumber.get(x).getText());
+
+        }
+
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~`");
         System.out.println("No of rows in this table : " + rowCount);
 
         System.out.println(rowsNumber.get(0).getText());
@@ -138,12 +168,21 @@ public class LoginPage {
         System.out.println(columNumber.get(0).getText());
         System.out.println(columNumber.get(1).getText());
         System.out.println(columNumber.get(2).getText());
+    }
 
-
+    @Test(priority = 3)
+    public void validateAutoSuggest() throws InterruptedException {
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+        driver.get("https://rahulshettyacademy.com/AutomationPractice/");
+        driver.findElement(By.id("autocomplete")).sendKeys("United St");
+        Thread.sleep(1400);
+        driver.findElement(By.xpath("//div[contains(@id,'ui-id')]")).click();
+        Thread.sleep(1400);
     }
 
 
-    @AfterTest
+    @AfterMethod
     public void tearDown() {
         driver.quit();
     }
