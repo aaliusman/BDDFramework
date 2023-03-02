@@ -107,8 +107,8 @@ public class LoginPage {
         driver.switchTo().alert().dismiss();
         Thread.sleep(300);
         driver.findElement(By.cssSelector("#confirmbtn")).click();
-        String getAlertText = driver.switchTo().alert().getTex
-        String expectedAlertText = "Hello , Are you sure you want to confirm";
+        String getAlertText = driver.switchTo().alert().getText();
+        String expectedAlertText = "Hello , Are you sure you want to confirm?";
         Assert.assertEquals(getAlertText, expectedAlertText);
 
 
