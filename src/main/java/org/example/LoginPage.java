@@ -119,15 +119,19 @@ public class LoginPage {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         driver.get("https://rahulshettyacademy.com/AutomationPractice/");
-        String mainWindow = driver.getWindowHandle();
+        // window 1
+        // window 2
+        String mainWindow = driver.getWindowHandle();// window 1
         driver.findElement(By.id("opentab")).click();
         Thread.sleep(2300);
         Set<String> wins = driver.getWindowHandles();
+        //! marks not equal !!
         for (String w : wins) {
             if (!w.equalsIgnoreCase(mainWindow)) {
-                driver.switchTo().window(w);
+                driver.switchTo().window(w);// window 2
                 Thread.sleep(2000);
                 String courses = driver.findElement(By.linkText("Courses")).getText();
+                driver.findElement(By.linkText("Courses")).isDisplayed();
                 Assert.assertEquals(courses, "Courses");
                 driver.close();
             }
@@ -154,7 +158,6 @@ public class LoginPage {
         }
             for (int x = 0; x<rowCount; x++) {
                 System.out.println("Rows value: "+ rowsNumber.get(x).getText());
-
         }
 
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~`");
