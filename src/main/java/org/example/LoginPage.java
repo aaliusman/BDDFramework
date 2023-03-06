@@ -3,24 +3,27 @@ package org.example;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.*;
 
-public class LoginPage {
+public class LoginPage  {
 
+    //Constructor is always same name as class and once new object is created for that class,
+    // it is called automatically. It has no return type.
+
+    public LoginPage() throws IOException, InterruptedException {
+//        validateLoginPage();
+    }
 
     WebDriver driver = null;
     String expectedErrorMessage = "Incorrect format Enter a valid 5-digit US ZIP Code.";
@@ -183,6 +186,27 @@ public class LoginPage {
         driver.findElement(By.xpath("//div[contains(@id,'ui-id')]")).click();
         Thread.sleep(1400);
     }
+
+    @Test
+    public void validateIFrame() throws InterruptedException {
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+        driver.get("https://rahulshettyacademy.com/AutomationPractice/");
+        //to scroll down
+        JavascriptExecutor j = (JavascriptExecutor) driver;
+        j.executeScript("window.scrollBy(0,500)");
+
+        Thread.sleep(3000);
+        driver.switchTo().frame("courses-iframe");
+        driver.findElement(By.linkText("Courses")).click();
+        Thread.sleep(6000);
+        driver.switchTo().defaultContent();
+        //to scroll up
+        JavascriptExecutor e = (JavascriptExecutor) driver;
+        e.executeScript("window.scrollBy(0,-500)");
+        driver.findElement(By.id("alertbtn")).click();
+    }
+
 
 
     @AfterMethod
